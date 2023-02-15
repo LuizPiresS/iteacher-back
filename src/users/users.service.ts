@@ -1,3 +1,4 @@
+import { UserNotFoundError } from './../common/errors/types/user-not-found.error';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,12 +26,12 @@ export class UsersService {
     return this.usersEntityToCreateUserResult(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<UsersEntity> {
+    const profile = await this.usersRepository.findById(id);
+    if (!profile) {
+      throw new UserNotFoundError('User not found');
+    }
+    return profile;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
