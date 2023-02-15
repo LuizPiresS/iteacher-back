@@ -48,8 +48,6 @@ describe('UsersService', () => {
           deletedAt: null,
         }));
 
-      // const usersRepository = new UsersRepository(prismaService);
-
       const result = await service.create({
         email: 'random@random.com',
         firstName: 'Random',
@@ -57,12 +55,67 @@ describe('UsersService', () => {
         password: 'R@aNd0mP@ssw0rd',
       });
 
-      console.log(result);
       expect(result).toEqual({
         id: '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
         email: 'random@random.com',
         firstName: 'Random',
         lastName: 'Random',
+      });
+    });
+  });
+
+  describe('#profile', () => {
+    it('should list personal profile', async () => {
+      const mockedPrismaCreate = (prismaService.user.findUnique = jest
+        .fn()
+        .mockResolvedValue({
+          id: '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
+          email: 'random@random.com',
+          password:
+            '$2b$13$evHEPYU9iFedWtkv7ktuqeu6uVILWYcdABPvc9Fc2zvI2JCaNTbpO',
+          firstName: 'Random',
+          lastName: 'Random',
+          phone: null,
+          dateOfBirth: null,
+          photoUrl: null,
+          addressStreet: null,
+          addressCity: null,
+          addressState: null,
+          addressZip: null,
+          addressCountry: null,
+          isVerified: false,
+          isActive: false,
+          createdAt: '2023-02-11T15:29:54.874Z',
+          updatedAt: '2023-02-11T15:29:54.874Z',
+          deletedAt: null,
+        }));
+
+      // const usersRepository = new UsersRepository(prismaService);
+
+      const result = await service.findOne(
+        '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
+      );
+
+      expect(result).toEqual({
+        id: '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
+        email: 'random@random.com',
+        password:
+          '$2b$13$evHEPYU9iFedWtkv7ktuqeu6uVILWYcdABPvc9Fc2zvI2JCaNTbpO',
+        firstName: 'Random',
+        lastName: 'Random',
+        phone: null,
+        dateOfBirth: null,
+        photoUrl: null,
+        addressStreet: null,
+        addressCity: null,
+        addressState: null,
+        addressZip: null,
+        addressCountry: null,
+        isVerified: false,
+        isActive: false,
+        createdAt: '2023-02-11T15:29:54.874Z',
+        updatedAt: '2023-02-11T15:29:54.874Z',
+        deletedAt: null,
       });
     });
   });
