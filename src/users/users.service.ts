@@ -34,8 +34,13 @@ export class UsersService {
     return profile;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<UsersEntity> {
+    const user = await this.usersRepository.findById(id);
+    if (!user) {
+      throw new UserNotFoundError('User not found');
+    }
+
+    return this.usersRepository.update(updateUserDto, id);
   }
 
   remove(id: number) {
