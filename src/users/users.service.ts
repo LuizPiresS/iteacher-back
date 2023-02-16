@@ -75,7 +75,12 @@ export class UsersService {
       throw new UserNotFoundError('User not found');
     }
 
-    const updatedUser = await this.usersRepository.update(updateUserDto, id);
+    const hashedPassword = await this.hashPassword(updateUserDto.password);
+
+    const updatedUser = await this.usersRepository.update(
+      { ...updateUserDto, password: hashedPassword },
+      id,
+    );
 
     return this.usersEntityToUpdateUserResult(updatedUser);
   }
