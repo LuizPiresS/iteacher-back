@@ -12,6 +12,38 @@ export type CreateUserResult = {
   firstName: string;
   lastName: string;
 };
+
+export type UpdateUserResult = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  dateOfBirth: string;
+  photoUrl: string;
+  addressStreet: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
+  addressCountry: string;
+  isVerified: boolean;
+  isActive: boolean;
+};
+
+export type ProfileResult = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  dateOfBirth: string;
+  photoUrl: string;
+  addressStreet: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
+  addressCountry: string;
+  isVerified: boolean;
+  isActive: boolean;
+};
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
@@ -26,21 +58,26 @@ export class UsersService {
     return this.usersEntityToCreateUserResult(user);
   }
 
-  async findOne(id: string): Promise<UsersEntity> {
+  async profile(id: string): Promise<ProfileResult> {
     const profile = await this.usersRepository.findById(id);
     if (!profile) {
       throw new UserNotFoundError('User not found');
     }
-    return profile;
+    return this.usersEntityToProfileResult(profile);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UsersEntity> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UpdateUserResult> {
     const user = await this.usersRepository.findById(id);
     if (!user) {
       throw new UserNotFoundError('User not found');
     }
 
-    return this.usersRepository.update(updateUserDto, id);
+    const updatedUser = await this.usersRepository.update(updateUserDto, id);
+
+    return this.usersEntityToUpdateUserResult(updatedUser);
   }
 
   remove(id: number) {
@@ -52,12 +89,50 @@ export class UsersService {
     return await bcrypt.hash(password, saltOrRounds);
   }
 
-  public usersEntityToCreateUserResult(data: UsersEntity): CreateUserResult {
+  private usersEntityToCreateUserResult(data: UsersEntity): CreateUserResult {
     return {
       id: data.id,
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
+    };
+  }
+
+  private usersEntityToUpdateUserResult(data: UsersEntity): UpdateUserResult {
+    return {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+      dateOfBirth: data.dateOfBirth,
+      photoUrl: data.photoUrl,
+      addressStreet: data.addressStreet,
+      addressCity: data.addressCity,
+      addressState: data.addressState,
+      addressZip: data.addressZip,
+      addressCountry: data.addressCountry,
+      isVerified: data.isVerified,
+      isActive: data.isActive,
+    };
+  }
+
+  private async usersEntityToProfileResult(
+    data: UsersEntity,
+  ): Promise<ProfileResult> {
+    return {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      phone: data.phone,
+      dateOfBirth: data.dateOfBirth,
+      photoUrl: data.photoUrl,
+      addressStreet: data.addressStreet,
+      addressCity: data.addressCity,
+      addressState: data.addressState,
+      addressZip: data.addressZip,
+      addressCountry: data.addressCountry,
+      isVerified: data.isVerified,
+      isActive: data.isActive,
     };
   }
 }

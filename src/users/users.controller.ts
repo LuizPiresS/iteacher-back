@@ -43,8 +43,8 @@ export class UsersController {
     description: 'Lista os dados do usuário',
   })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  profile(@Param('id') id: string) {
+    return this.usersService.profile(id);
   }
 
   @Patch(':id')

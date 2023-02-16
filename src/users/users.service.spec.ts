@@ -69,53 +69,39 @@ describe('UsersService', () => {
       const mockedPrismaCreate = (prismaService.user.findUnique = jest
         .fn()
         .mockResolvedValue({
-          id: '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
-          email: 'random@random.com',
-          password:
-            '$2b$13$evHEPYU9iFedWtkv7ktuqeu6uVILWYcdABPvc9Fc2zvI2JCaNTbpO',
+          email: 'randon2@randon.com',
           firstName: 'Random',
           lastName: 'Random',
-          phone: null,
-          dateOfBirth: null,
-          photoUrl: null,
-          addressStreet: null,
-          addressCity: null,
-          addressState: null,
-          addressZip: null,
-          addressCountry: null,
+          phone: '53123456789',
+          dateOfBirth: '06/04/1981',
+          photoUrl: 'https://teste.com/photo.png',
+          addressStreet: 'address street',
+          addressCity: 'address city',
+          addressState: 'address state',
+          addressZip: '01001-100',
+          addressCountry: 'Brasil',
           isVerified: false,
           isActive: false,
-          createdAt: '2023-02-11T15:29:54.874Z',
-          updatedAt: '2023-02-11T15:29:54.874Z',
-          deletedAt: null,
         }));
 
-      // const usersRepository = new UsersRepository(prismaService);
-
-      const result = await service.findOne(
+      const result = await service.profile(
         '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
       );
 
       expect(result).toEqual({
-        id: '10f04e88-7b97-419f-9b8e-56c518cf5d8a',
-        email: 'random@random.com',
-        password:
-          '$2b$13$evHEPYU9iFedWtkv7ktuqeu6uVILWYcdABPvc9Fc2zvI2JCaNTbpO',
+        email: 'randon2@randon.com',
         firstName: 'Random',
         lastName: 'Random',
-        phone: null,
-        dateOfBirth: null,
-        photoUrl: null,
-        addressStreet: null,
-        addressCity: null,
-        addressState: null,
-        addressZip: null,
-        addressCountry: null,
+        phone: '53123456789',
+        dateOfBirth: '06/04/1981',
+        photoUrl: 'https://teste.com/photo.png',
+        addressStreet: 'address street',
+        addressCity: 'address city',
+        addressState: 'address state',
+        addressZip: '01001-100',
+        addressCountry: 'Brasil',
         isVerified: false,
         isActive: false,
-        createdAt: '2023-02-11T15:29:54.874Z',
-        updatedAt: '2023-02-11T15:29:54.874Z',
-        deletedAt: null,
       });
     });
   });
