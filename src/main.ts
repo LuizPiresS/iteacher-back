@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConflictErrorInterceptor } from './common/errors/interceptors/conflict-error.interceptor';
 import { DatabaseInterceptor } from './common/errors/interceptors/database-error.interceptor';
-import { UserNotFoundErrorInterceptor } from './common/errors/interceptors/user-not-found-error.interceptor';
+import { UserNotFoundErrorInterceptor } from './users/errors/interceptors/user-not-found-error.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
