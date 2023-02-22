@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
- binaryTargets = ["native", "linux-musl"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -12,24 +12,27 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(uuid())
-  email          String    @unique
+  id             String  @id @default(uuid())
+  email          String  @unique
   password       String
   firstName      String
   lastName       String
   phone          String?
-  dateOfBirth    String?   @map("date_of_birth")
-  photoUrl       String?   @map("photo_url")
-  addressStreet  String?   @map("address_street")
-  addressCity    String?   @map("address_city")
-  addressState   String?   @map("address_state")
-  addressZip     String?   @map("address_zip")
-  addressCountry String?   @map("address_country")
-  isVerified     Boolean   @default(false) @map("is_verified")
-  isActive       Boolean   @default(false) @map("is_active")
-  createdAt      DateTime  @default(now()) @map("created_at")
-  updatedAt      DateTime  @updatedAt @map("updated_at")
-  deletedAt      DateTime? @map("deleted_at")
+  dateOfBirth    String? @map("date_of_birth")
+  photoUrl       String? @map("photo_url")
+  addressStreet  String? @map("address_street")
+  addressCity    String? @map("address_city")
+  addressState   String? @map("address_state")
+  addressZip     String? @map("address_zip")
+  addressCountry String? @map("address_country")
+  verified       Boolean @default(false)
+  activated      Boolean @default(false) // quando o usuario desavitar a acc os dados sensiveis não devem ser deletados a reativação deve ser feita por email
+  deleted        Boolean @default(false) // Quando o usuario optar por deletar apenas os dados senviveis
+  roles          Json?
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@map("users")
 }
