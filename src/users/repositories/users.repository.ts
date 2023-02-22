@@ -11,7 +11,7 @@ export class UsersRepository implements IUsersRepository {
 
   public async create(data: CreateUserDto): Promise<UsersEntity> {
     const user = await this.prisma.user.create({
-      data: data,
+      data: data as any,
     });
 
     return user;
@@ -26,8 +26,11 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
+  public findByIdAndActivated(id: string) {
+    return this.prisma.user.findFirst({ where: { activated: true, id } });
+  }
   public async findByEmail(email: string): Promise<UsersEntity> {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: {
         email,
       },
@@ -35,7 +38,7 @@ export class UsersRepository implements IUsersRepository {
   }
 
   public async findById(id: string): Promise<UsersEntity> {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findFirst({
       where: {
         id,
       },

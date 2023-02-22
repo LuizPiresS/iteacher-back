@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -26,4 +27,10 @@ export class CreateUserDto {
   @ApiProperty({ description: 'Last name', example: 'Random' })
   @IsString()
   public readonly lastName: string;
+
+  @ApiProperty({
+    description: 'roles to new user',
+    example: { roles: ['aluno'] },
+  })
+  public readonly roles: Prisma.JsonValue;
 }

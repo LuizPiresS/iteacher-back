@@ -1,4 +1,4 @@
-import { UserNotFoundError } from './../common/errors/types/user-not-found.error';
+import { UserNotFoundError } from './errors/types/user-not-found.error';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -25,8 +25,8 @@ export type UpdateUserResult = {
   addressState: string;
   addressZip: string;
   addressCountry: string;
-  isVerified: boolean;
-  isActive: boolean;
+  verified: boolean;
+  activated: boolean;
 };
 
 export type ProfileResult = {
@@ -41,20 +41,18 @@ export type ProfileResult = {
   addressState: string;
   addressZip: string;
   addressCountry: string;
-  isVerified: boolean;
-  isActive: boolean;
+  verified: boolean;
+  activated: boolean;
 };
 @Injectable()
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
   async create(createUserDto: CreateUserDto): Promise<CreateUserResult> {
     const hashedPassword = await this.hashPassword(createUserDto.password);
-
     const user = await this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
     });
-
     return this.usersEntityToCreateUserResult(user);
   }
 
@@ -94,6 +92,14 @@ export class UsersService {
     return await bcrypt.hash(password, saltOrRounds);
   }
 
+  private generateActivationCode(): string {
+    const activationCode = `${this.randomNumber()} - ${this.randomNumber()} - ${this.randomNumber()} - ${this.randomNumber()}`;
+    return activationCode;
+  }
+
+  private randomNumber(): number {
+    return Math.floor(Math.random() * 10);
+  }
   private usersEntityToCreateUserResult(data: UsersEntity): CreateUserResult {
     return {
       id: data.id,
@@ -116,8 +122,8 @@ export class UsersService {
       addressState: data.addressState,
       addressZip: data.addressZip,
       addressCountry: data.addressCountry,
-      isVerified: data.isVerified,
-      isActive: data.isActive,
+      verified: data.verified,
+      activated: data.activated,
     };
   }
 
@@ -136,8 +142,8 @@ export class UsersService {
       addressState: data.addressState,
       addressZip: data.addressZip,
       addressCountry: data.addressCountry,
-      isVerified: data.isVerified,
-      isActive: data.isActive,
+      verified: data.verified,
+      activated: data.activated,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 export class UsersEntity implements User {
   id: string;
   email: string;
@@ -13,8 +13,10 @@ export class UsersEntity implements User {
   addressState: string;
   addressZip: string;
   addressCountry: string;
-  isVerified: boolean;
-  isActive: boolean;
+  verified: boolean;
+  activated: boolean;
+  deleted: boolean;
+  roles: Prisma.JsonValue;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date;
