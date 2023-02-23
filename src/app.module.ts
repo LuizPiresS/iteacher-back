@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma/prisma.service';
 import { UsersModule } from './users/users.module';
-
+import config from './config/config';
+import { validate } from './config/env.validation';
 @Module({
-  imports: [UsersModule],
+  // ConfigModule deve ser sempre o primeiro modulo a ser importado para que todos os módulos tenha acesso as variáveis de configuração
+  imports: [
+    ConfigModule.forRoot({ validate, isGlobal: true, load: [config] }),
+    UsersModule,
+  ],
   controllers: [],
   providers: [PrismaService],
 })
