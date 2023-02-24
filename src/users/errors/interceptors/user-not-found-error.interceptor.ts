@@ -1,4 +1,4 @@
-import { UserNotFoundError } from '../types/user-not-found.error';
+import { UserNotFoundError } from '../../../common/errors/types/user-not-found.error';
 import {
   Injectable,
   NestInterceptor,
