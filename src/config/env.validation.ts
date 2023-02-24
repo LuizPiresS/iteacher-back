@@ -9,6 +9,7 @@ enum Environment {
 }
 
 class EnvironmentVariables {
+  // APP CONFIG
   @IsEnum(Environment)
   NODE_ENV: Environment;
 
@@ -16,26 +17,33 @@ class EnvironmentVariables {
   APP_PORT: number;
 
   @IsString()
+  BASE_URL: string;
+
+  // SWAGGER CONFIG
+  @IsString()
   SWAGGER_TITLE: string;
 
   @IsString()
   SWAGGER_DESCRIPTION: string;
 
+  // E-MAIL CONFIG
   @IsString()
-  SMTP_HOST: string;
+  MAIL_HOST: string;
 
   @IsNumber()
-  SMTP_PORT: number;
+  MAIL_PORT: number;
 
   @IsString()
-  SMTP_USERNAME: string;
+  MAIL_USER: string;
 
   @IsString()
-  SMTP_PASSWORD: string;
+  MAIL_PASSWORD: string;
 
+  // DATABASE CONFIG
   @IsString()
   DATABASE_URL: string;
 
+  // JWT CONFIG
   @IsString()
   JWT_SECRET: string;
 

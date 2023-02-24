@@ -14,6 +14,7 @@ CREATE TABLE "users" (
     "address_zip" TEXT,
     "address_country" TEXT,
     "verified" BOOLEAN NOT NULL DEFAULT false,
+    "token" TEXT,
     "activated" BOOLEAN NOT NULL DEFAULT false,
     "deleted" BOOLEAN NOT NULL DEFAULT false,
     "roles" JSONB,

@@ -26,9 +26,16 @@ export class UsersRepository implements IUsersRepository {
     });
   }
 
-  public findByIdAndActivated(id: string) {
-    return this.prisma.user.findFirst({ where: { activated: true, id } });
+  public async updateVerifiedStatusByEmail(email: string) {
+    return this.prisma.user.update({
+      where: { email: email },
+      data: {
+        verified: true,
+        activated: true,
+      },
+    });
   }
+
   public async findByEmail(email: string): Promise<UsersEntity> {
     return this.prisma.user.findFirst({
       where: {

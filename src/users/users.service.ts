@@ -1,4 +1,5 @@
-import { UserNotFoundError } from './errors/types/user-not-found.error';
+import { MailService } from './../mail/mail.service';
+import { UserNotFoundError } from '../common/errors/types/user-not-found.error';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -46,16 +47,34 @@ export type ProfileResult = {
 };
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly mailService: MailService,
+  ) {}
   async create(createUserDto: CreateUserDto): Promise<CreateUserResult> {
+    const token = this.generateToken();
     const hashedPassword = await this.hashPassword(createUserDto.password);
     const user = await this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
+      token,
+    });
+
+    this.mailService.sendUserConfirmation({
+      email: user.email,
+      name: user.lastName,
+      token,
     });
     return this.usersEntityToCreateUserResult(user);
   }
 
+  public async emailConfirmation(email: string, token: string) {
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (user.token === token) {
+      await this.usersRepository.updateVerifiedStatusByEmail(email);
+    }
+  }
   async profile(id: string): Promise<ProfileResult> {
     const profile = await this.usersRepository.findById(id);
     if (!profile) {
@@ -92,13 +111,8 @@ export class UsersService {
     return await bcrypt.hash(password, saltOrRounds);
   }
 
-  private generateActivationCode(): string {
-    const activationCode = `${this.randomNumber()} - ${this.randomNumber()} - ${this.randomNumber()} - ${this.randomNumber()}`;
-    return activationCode;
-  }
-
-  private randomNumber(): number {
-    return Math.floor(Math.random() * 10);
+  private generateToken(): string {
+    return Math.floor(1000 + Math.random() * 9000).toString();
   }
   private usersEntityToCreateUserResult(data: UsersEntity): CreateUserResult {
     return {

@@ -52,6 +52,15 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
+  @Get('confirm/:token/:email')
+  public async emailConfirmation(
+    @Param('email') email: string,
+    @Param('token') token: string,
+  ) {
+    console.log(token);
+    await this.usersService.emailConfirmation(email, token);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

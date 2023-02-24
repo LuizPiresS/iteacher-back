@@ -26,6 +26,7 @@ model User {
   addressZip     String? @map("address_zip")
   addressCountry String? @map("address_country")
   verified       Boolean @default(false)
+  token          String?
   activated      Boolean @default(false) // quando o usuario desavitar a acc os dados sensiveis não devem ser deletados a reativação deve ser feita por email
   deleted        Boolean @default(false) // Quando o usuario optar por deletar apenas os dados senviveis
   roles          Json?

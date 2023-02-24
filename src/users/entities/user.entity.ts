@@ -14,6 +14,7 @@ export class UsersEntity implements User {
   addressZip: string;
   addressCountry: string;
   verified: boolean;
+  token: string;
   activated: boolean;
   deleted: boolean;
   roles: Prisma.JsonValue;
