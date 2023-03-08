@@ -15,6 +15,10 @@ async function bootstrap() {
     .setDescription(process.env.SWAGGER_DESCRIPTION)
     .setVersion(process.env.npm_package_version)
     .addTag('iTeacher')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'JWT',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
