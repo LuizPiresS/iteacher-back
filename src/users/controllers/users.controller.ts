@@ -10,10 +10,12 @@ import {
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AllowAny } from 'src/auth/decorators/allow-any.decorator';
 
 @ApiTags('Users')
 @Controller('users')
+@ApiBearerAuth('JWT')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -29,6 +31,7 @@ export class UsersController {
     status: 201,
     description: 'User created',
   })
+  @AllowAny()
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);

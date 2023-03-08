@@ -1,10 +1,11 @@
-import { AuthDto } from './../dtos/auth.dto';
+import { AuthDto } from '../dtos/auth.dto';
 import { LocalAuthGuard } from '../guards/local-auth/local-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../services/auth.service';
-import { Controller, Post, UseGuards, Request, Query } from '@nestjs/common';
+import { Controller, Post, UseGuards, Query, Body } from '@nestjs/common';
 import { AllowAny } from '../decorators/allow-any.decorator';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -15,7 +16,7 @@ export class AuthController {
   @Post('login')
   @AllowAny()
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req: AuthDto) {
+  async login(@Body() req: AuthDto) {
     return this.authService.login(req);
   }
 
