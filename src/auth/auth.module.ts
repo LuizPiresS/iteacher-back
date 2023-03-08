@@ -1,5 +1,5 @@
 import { UsersRepository } from './../users/repositories/users.repository';
-import { UsersService } from './../users/users.service';
+import { UsersService } from '../users/services/users.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { ConfigService } from '@nestjs/config';

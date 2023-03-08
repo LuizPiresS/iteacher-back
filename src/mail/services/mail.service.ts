@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { UserConfirmationDTO } from './dtos/user-confirmation.dto';
+import { UserConfirmationDTO } from '../dtos/user-confirmation.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 

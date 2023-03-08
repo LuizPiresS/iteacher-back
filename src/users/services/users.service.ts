@@ -1,11 +1,11 @@
-import { MailService } from './../mail/mail.service';
-import { UserNotFoundError } from '../common/errors/types/user-not-found.error';
+import { MailService } from '../../mail/services/mail.service';
+import { UserNotFoundError } from '../../common/errors/types/user-not-found.error';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersRepository } from './repositories/users.repository';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { UsersRepository } from '../repositories/users.repository';
 import * as bcrypt from 'bcrypt';
-import { UsersEntity } from './entities/user.entity';
+import { UsersEntity } from '../entities/user.entity';
 
 export type CreateUserResult = {
   id: string;
@@ -102,8 +102,12 @@ export class UsersService {
     return this.usersEntityToUpdateUserResult(updatedUser);
   }
 
-  remove(id: number) {
+  public async remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  public async findByEmail(email: string): Promise<UsersEntity> {
+    return this.usersRepository.findByEmail(email);
   }
 
   private async hashPassword(password: string): Promise<string> {
