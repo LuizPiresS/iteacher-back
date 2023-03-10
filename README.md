@@ -16,7 +16,7 @@
 
 - clonar o o repositório
 
-  - git clone git@github.com:LuizPiresS/ITeacher.git
+  - git clone [git@github.com:LuizPiresS/ITeacher.git](https://github.com/LuizPiresS/iteacher-back.git)
   - npm install
   - docker-compose up -d (sobe o banco de dados)
   - npx prisma migrate dev (roda as migrations)
