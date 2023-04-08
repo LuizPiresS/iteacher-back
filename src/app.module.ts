@@ -8,6 +8,8 @@ import { validate } from './config/env.validation';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
+import { AccountValidationModule } from './account-validation/account-validation.module';
+
 @Module({
   // ConfigModule deve ser sempre o primeiro modulo a ser importado para que todos os módulos tenha acesso as variáveis de configuração
   imports: [
@@ -15,6 +17,7 @@ import { APP_GUARD, Reflector } from '@nestjs/core';
     UsersModule,
     MailModule,
     AuthModule,
+    AccountValidationModule,
   ],
   controllers: [],
   providers: [
