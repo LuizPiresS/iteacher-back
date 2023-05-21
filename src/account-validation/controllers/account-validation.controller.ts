@@ -14,7 +14,6 @@ export class AccountValidationController {
     @Param('email') email: string,
     @Param('token') token: string,
   ) {
-    console.log(token);
     await this.accountValidationService.emailConfirmation(email, token);
   }
 }
