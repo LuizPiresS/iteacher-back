@@ -31,6 +31,6 @@ async function bootstrap() {
   app.useGlobalInterceptors(new DatabaseInterceptor());
   app.useGlobalInterceptors(new UserNotFoundErrorInterceptor());
 
-  await app.listen(process.env.APP_PORT || 3000);
+  await app.listen(process.env.APP_PORT || process.env.APP_PORT);
 }
 bootstrap();
