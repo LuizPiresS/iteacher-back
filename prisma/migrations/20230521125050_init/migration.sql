@@ -39,14 +39,14 @@ CREATE TABLE "UserInternalId" (
 );
 
 -- CreateTable
-CREATE TABLE "EmailToken" (
+CREATE TABLE "email_token" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "verified" BOOLEAN NOT NULL DEFAULT false,
     "userId" TEXT NOT NULL,
 
-    CONSTRAINT "EmailToken_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "email_token_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -59,4 +59,4 @@ CREATE UNIQUE INDEX "UserInternalId_user_id_key" ON "UserInternalId"("user_id");
 ALTER TABLE "user_profile" ADD CONSTRAINT "user_profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "EmailToken" ADD CONSTRAINT "EmailToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "email_token" ADD CONSTRAINT "email_token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
