@@ -11,9 +11,9 @@ export class MailService {
   ) {}
 
   public async sendUserConfirmation(data: UserConfirmationDTO) {
-    const url = `${this.config.get<string>('BASE_URL')}/users/confirm/${
-      data.token
-    }/${data.email}`;
+    const url = `${this.config.get<string>(
+      'BASE_URL',
+    )}/account-validation/confirm-email/${data.token}/${data.email}`;
 
     await this.mailerService.sendMail({
       to: data.email,

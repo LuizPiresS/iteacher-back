@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UsersEntity } from '../entities/user.entity';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { IUsersRepository } from '../interfaces/users-repository.interface';
+import { IUsersRepository } from './interfaces/users-repository.interface';
 
 @Injectable()
 export class UsersRepository implements IUsersRepository {
@@ -11,12 +11,21 @@ export class UsersRepository implements IUsersRepository {
 
   public async create(data: CreateUserDto): Promise<UsersEntity> {
     const user = await this.prisma.user.create({
-      data: data as any,
+      data: data,
+    });
+
+    await this.prisma.userInternalId.create({
+      data: { userId: user.id },
     });
 
     return user;
   }
 
+  /**
+   * @param data
+   * @param id
+   * @returns Promise<UsersEntity>
+   */
   public async update(data: UpdateUserDto, id: string): Promise<UsersEntity> {
     return this.prisma.user.update({
       where: {
@@ -50,5 +59,9 @@ export class UsersRepository implements IUsersRepository {
         id,
       },
     });
+  }
+
+  public async delete(id: string): Promise<UsersEntity> {
+    return this.prisma.user.delete({ where: { id } });
   }
 }

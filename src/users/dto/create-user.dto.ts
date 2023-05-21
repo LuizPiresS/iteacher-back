@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 
@@ -20,21 +20,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   public password: string;
 
-  @ApiProperty({ description: 'First name', example: 'Random' })
+  @ApiProperty({ description: 'Full Name', example: 'Random Random' })
   @IsString()
-  public readonly firstName: string;
-
-  @ApiProperty({ description: 'Last name', example: 'Random' })
-  @IsString()
-  public readonly lastName: string;
+  public readonly fullName: string;
 
   @ApiProperty({
     description: 'roles to new user',
     example: { roles: ['aluno'] },
   })
   public readonly roles: Prisma.JsonValue;
-
-  @IsString()
-  @IsOptional()
-  public readonly token: string;
 }

@@ -18,8 +18,8 @@ export class AuthService {
       const passwordTrue = await bcrypt.compare(userPassword, user.password);
 
       if (passwordTrue) {
-        const { id, firstName, email } = user;
-        return { id, firstName, email };
+        const { id, fullName, email } = user;
+        return { id, fullName, email };
       }
     }
 

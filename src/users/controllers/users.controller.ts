@@ -37,35 +37,26 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @ApiResponse({
-    status: 404,
-    description: 'Usuário não encontrado',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Lista os dados do usuário',
-  })
-  @Get(':id')
-  profile(@Param('id') id: string) {
-    return this.usersService.profile(id);
-  }
+  // @ApiResponse({
+  //   status: 404,
+  //   description: 'Usuário não encontrado',
+  // })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'Lista os dados do usuário',
+  // })
+  // @Get(':id')
+  // profile(@Param('id') id: string) {
+  //   return this.usersService.profile(id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Get('confirm/:token/:email')
-  public async emailConfirmation(
-    @Param('email') email: string,
-    @Param('token') token: string,
-  ) {
-    console.log(token);
-    await this.usersService.emailConfirmation(email, token);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

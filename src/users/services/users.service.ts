@@ -1,3 +1,4 @@
+import { AccountValidationService } from './../../account-validation/services/account-validation.service';
 import { MailService } from '../../mail/services/mail.service';
 import { UserNotFoundError } from '../../common/errors/types/user-not-found.error';
 import { Injectable } from '@nestjs/common';
@@ -10,30 +11,19 @@ import { UsersEntity } from '../entities/user.entity';
 export type CreateUserResult = {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
 };
 
 export type UpdateUserResult = {
   email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  dateOfBirth: string;
-  photoUrl: string;
-  addressStreet: string;
-  addressCity: string;
-  addressState: string;
-  addressZip: string;
-  addressCountry: string;
+  fullName: string;
   verified: boolean;
   activated: boolean;
 };
 
 export type ProfileResult = {
   email: string;
-  firstName: string;
-  lastName: string;
+  fullName: string;
   phone: string;
   dateOfBirth: string;
   photoUrl: string;
@@ -48,40 +38,41 @@ export type ProfileResult = {
 @Injectable()
 export class UsersService {
   constructor(
+    // @Inject('IUserRepository')
     private readonly usersRepository: UsersRepository,
+
+    private readonly accountValidationService: AccountValidationService,
+
     private readonly mailService: MailService,
   ) {}
   async create(createUserDto: CreateUserDto): Promise<CreateUserResult> {
-    const token = this.generateToken();
     const hashedPassword = await this.hashPassword(createUserDto.password);
     const user = await this.usersRepository.create({
       ...createUserDto,
       password: hashedPassword,
-      token,
     });
 
-    this.mailService.sendUserConfirmation({
+    const token = await this.accountValidationService.createEmailToken({
       email: user.email,
-      name: user.lastName,
-      token,
+      token: '',
+      userId: user.id,
+    });
+
+    await this.mailService.sendUserConfirmation({
+      email: user.email,
+      name: user.fullName,
+      token: token.token,
     });
     return this.usersEntityToCreateUserResult(user);
   }
 
-  public async emailConfirmation(email: string, token: string) {
-    const user = await this.usersRepository.findByEmail(email);
-
-    if (user.token === token) {
-      await this.usersRepository.updateVerifiedStatusByEmail(email);
-    }
-  }
-  async profile(id: string): Promise<ProfileResult> {
-    const profile = await this.usersRepository.findById(id);
-    if (!profile) {
-      throw new UserNotFoundError('User not found');
-    }
-    return this.usersEntityToProfileResult(profile);
-  }
+  // async profile(id: string): Promise<ProfileResult> {
+  //   const profile = await this.usersRepository.findById(id);
+  //   if (!profile) {
+  //     throw new UserNotFoundError('User not found');
+  //   }
+  //   return this.usersEntityToProfileResult(profile);
+  // }
 
   async update(
     id: string,
@@ -102,8 +93,8 @@ export class UsersService {
     return this.usersEntityToUpdateUserResult(updatedUser);
   }
 
-  public async remove(id: number) {
-    return `This action removes a #${id} user`;
+  public async remove(id: string) {
+    return this.usersRepository.delete(id);
   }
 
   public async findByEmail(email: string): Promise<UsersEntity> {
@@ -115,53 +106,31 @@ export class UsersService {
     return await bcrypt.hash(password, saltOrRounds);
   }
 
-  private generateToken(): string {
-    return Math.floor(1000 + Math.random() * 9000).toString();
-  }
   private usersEntityToCreateUserResult(data: UsersEntity): CreateUserResult {
     return {
       id: data.id,
       email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      fullName: data.fullName,
     };
   }
 
   private usersEntityToUpdateUserResult(data: UsersEntity): UpdateUserResult {
     return {
       email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phone: data.phone,
-      dateOfBirth: data.dateOfBirth,
-      photoUrl: data.photoUrl,
-      addressStreet: data.addressStreet,
-      addressCity: data.addressCity,
-      addressState: data.addressState,
-      addressZip: data.addressZip,
-      addressCountry: data.addressCountry,
+      fullName: data.fullName,
       verified: data.verified,
       activated: data.activated,
     };
   }
 
-  private async usersEntityToProfileResult(
-    data: UsersEntity,
-  ): Promise<ProfileResult> {
-    return {
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phone: data.phone,
-      dateOfBirth: data.dateOfBirth,
-      photoUrl: data.photoUrl,
-      addressStreet: data.addressStreet,
-      addressCity: data.addressCity,
-      addressState: data.addressState,
-      addressZip: data.addressZip,
-      addressCountry: data.addressCountry,
-      verified: data.verified,
-      activated: data.activated,
-    };
-  }
+  // private async usersEntityToProfileResult(
+  //   data: UsersEntity,
+  // ): Promise<ProfileResult> {
+  //   return {
+  //     email: data.email,
+  //     fullName: data.fullName,
+  //     verified: data.verified,
+  //     activated: data.activated,
+  //   };
+  // }
 }

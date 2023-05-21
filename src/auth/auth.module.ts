@@ -9,9 +9,11 @@ import { AuthService } from './services/auth.service';
 import { AuthController } from './controllers/auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { AccountValidationModule } from 'src/account-validation/account-validation.module';
 
 @Module({
   imports: [
+    AccountValidationModule,
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
